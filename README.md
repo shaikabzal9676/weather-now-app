@@ -6,7 +6,7 @@ It provides real-time weather updates, hourly trends, and a 7-day forecast using
 ---
 
 ## 🚀 Live Demo
-👉 [Weather Now App](https://weather-now-app-flax.vercel.app/)
+👉 [Weather Now App](https://weather-now-five-xi.vercel.app/)
 
 ---
 
