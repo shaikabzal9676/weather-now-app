@@ -69,33 +69,47 @@ export default function App() {
   };
 
   const locateMe = useCallback(() => {
-    setError('');
-    setLoading(true);
-    setPlaces([]);
-    setSelected(null);
-    setWeather(null);
-    if (!navigator.geolocation) {
-      setError('Geolocation not supported by your browser.');
+  setError('');
+  setLoading(true);
+  setPlaces([]);
+  setSelected(null);
+  setWeather(null);
+
+  if (!navigator.geolocation) {
+    setError('Geolocation not supported by your browser.');
+    setLoading(false);
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    try {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+
+      // ✅ Use Nominatim API (works with CORS)
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
+      );
+      const data = await res.json();
+
+      const place = {
+        name: data.address?.city || data.address?.town || data.address?.village || "Current Location",
+        latitude: lat,
+        longitude: lon,
+        timezone: "auto",
+      };
+
+      handleSelectPlace(place);
+    } catch (err) {
+      setError('Failed to determine location or fetch weather.');
       setLoading(false);
-      return;
     }
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-      try {
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
-        const base = API_BASE || 'https://geocoding-api.open-meteo.com';
-        const res = await axios.get(`${base}/v1/reverse?latitude=${lat}&longitude=${lon}&format=json`);
-        const place = (res.data?.results?.[0]) || { name: 'Current location', latitude: lat, longitude: lon, timezone: 'auto' };
-        handleSelectPlace(place);
-      } catch (err) {
-        setError('Failed to determine location or fetch weather.');
-        setLoading(false);
-      }
-    }, (err) => {
-      setError('Unable to access location: ' + err.message);
-      setLoading(false);
-    });
-  }, [handleSelectPlace]);
+  }, (err) => {
+    setError('Unable to access location: ' + err.message);
+    setLoading(false);
+  });
+}, [handleSelectPlace]);
+
 
   useEffect(() => {
     (async () => {
