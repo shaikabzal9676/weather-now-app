@@ -10,6 +10,18 @@ It provides real-time weather updates, hourly trends, and a 7-day forecast using
 
 ---
 
+## 📸 Screenshots
+
+### Homepage
+![Homepage Screenshot](./screenshots/home.png)
+
+### Hourly Forecast
+![Hourly Forecast Screenshot](./screenshots/forecast.png)
+
+### Map View
+![Map Screenshot](./screenshots/map.png)
+
+
 ## ✨ Features
 
 - 🔍 **City Search** – Search weather by city name (e.g., London, Tokyo, Paris).  
